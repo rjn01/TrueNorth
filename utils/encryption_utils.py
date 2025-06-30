@@ -11,7 +11,7 @@ class EncryptionManager:
         self.fernet = Fernet(key.encode())
 
     def encrypt(self, plaintext: str) -> bytes:
-        return self.fernet.encrypt(plaintext.encode())
+        return self.fernet.encrypt(str(plaintext).encode())
 
     #def decrypt(self, ciphertext: bytes) -> str:
     #    return self.fernet.decrypt(ciphertext).decode()
@@ -22,7 +22,15 @@ class EncryptionManager:
             ciphertext = ciphertext.encode()
         elif not isinstance(ciphertext, bytes):
             raise TypeError(f"Unsupported type for decryption: {type(ciphertext)}")
-        return self.fernet.decrypt(ciphertext).decode()
+        
+        decrypted = self.fernet.decrypt(ciphertext).decode()
+
+        if decrypted.isdigit():
+            return int(decrypted)
+        try:
+            return float(decrypted)
+        except ValueError:
+            return decrypted
 
 
 def set_encryption_key():

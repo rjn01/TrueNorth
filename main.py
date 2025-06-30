@@ -10,7 +10,9 @@ set_encryption_key()
 load_dotenv()  # load env file
 
 from models import db  # load the ORM
-from services.journals_service import save_journal_entry, get_journal_list, get_summary_sentiment, get_summary_themes, get_summary_input_streak
+from services.journals_service import save_journal_entry, get_journal_detail, get_journal_list, get_summary_total_entry_days, get_summary_input_streak
+from services.emotions_service import get_summary_emotion_range
+from services.themes_service import get_summary_top_3_theme
 
 app = Flask(__name__)
 
@@ -68,9 +70,29 @@ def submit():
     logger.debug(f"Journal received: {journal_text}")
     json_payload = {"entries": [journal_text]}
     logger.debug(f"json_payload : {json_payload}")
-    emotions = model.analyze_journal(json_payload)
-    logger.info(f"emotions : {emotions}")
-    save_journal_entry(journal_text, emotions)
+    response = model.analyze_journal(json_payload)
+    # response = {
+    #     "phq9": {
+    #         "total_score": 9,
+    #         "severity": "mild"
+    #     },
+    #     "gad7": {
+    #         "total_score": 9,
+    #         "severity": "mild"
+    #     },
+    #     "themes": [
+    #         "feel anxious",
+    #         "trouble sleeping",
+    #         "anxious trouble"
+    #     ],
+    #     "emotions": [
+    #         "Joy", "Love", "Anger"
+    #     ],
+    #     "feedback": "No significant symptoms detected.",
+    #     "analysis_model": "RoBERTa-GoEmotions+KeyBERT+OPT-1.3b"
+    # }
+    logger.info(f"response : {response}")
+    save_journal_entry(journal_text, response)
     return jsonify(status="success")
 
 # API to get journal list
@@ -80,29 +102,40 @@ def journalList():
     print(getAllJournalInput)
     return jsonify(getAllJournalInput)
 
-# API to get summary sentiment
-@app.route('/summarySentiment', methods=['GET', 'POST'])
-def summarySentiment():
-    sentimentAllTime = get_summary_sentiment()
-    countSentiment = dict(sentimentAllTime)
-    print(countSentiment)
-    return jsonify(countSentiment)
+@app.route('/journalDetail/<int:journal_id>', methods=['GET'])
+def journal_detail(journal_id):
+    journalDetail = get_journal_detail(journal_id)
+    print(journalDetail)
+    return jsonify(journalDetail)
+
+@app.route('/summaryEmotionRange', methods=['GET', 'POST'])
+def summaryEmotionRange():
+    emotionRangeList = get_summary_emotion_range()
+    print(emotionRangeList)
+    return jsonify(emotionRangeList)
+
+@app.route('/summaryTotalEntry', methods=['GET', 'POST'])
+def summaryTotalEntry():
+    noOfTotalEntry = get_summary_total_entry_days()
+    print(noOfTotalEntry)
+    return jsonify(noOfTotalEntry)
+
 
 # API to get summary themes
-@app.route('/summaryThemes',methods=['GET', 'POST'])
+@app.route('/summaryTop3Themes',methods=['GET', 'POST'])
 def summaryThemes():
-    themesAllTime = get_summary_themes()
-    countThemes = dict(themesAllTime)
-    print(countThemes)
-    return jsonify(countThemes)
+    top3Themes = get_summary_top_3_theme()
+    themes = dict(top3Themes)
+    print(themes)
+    return jsonify(themes)
+
 
 # API to get input streak
 @app.route('/summaryInputStreak', methods=['GET', 'POST'])
 def summaryInputStreak():
-    listDateInputStreak = get_summary_input_streak()
-    date_list = [int(day) for day in listDateInputStreak]
-    print(date_list)
-    return jsonify(date_list)
+    noOfInputStreak = get_summary_input_streak()
+    print(noOfInputStreak)
+    return jsonify(noOfInputStreak)
 
 if __name__ == '__main__':
     app.run(debug=True)
