@@ -68,25 +68,16 @@ function showDetailedEntry(entry) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  const saveBtn = document.getElementById("saveButton");
-  if (saveBtn) {
-    saveBtn.addEventListener("click", saveJournalEntry);
-  }
-
-  // Load history
-  //const historyBtn = document.querySelector(".option.history");
-  //if (historyBtn) {
-  //  historyBtn.addEventListener("click", () => {
-  //    window.location.href = "history.html";
-  //  });
-  //}
-
-  // Load history list
-  function clearTextbox(){
+function clearTextbox(){
     try {
-      document.getElementById("journalInput").value = "";
+
+      path = checkName()
+      if (path == "/journal"){
+        console.log("inside cleartextbox");
+        document.getElementById("journalInput").value = "";
+
+      }
+      
       
     } catch (error) {
       console.log("That was a mistake")
@@ -94,7 +85,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function checkName(){
+    console.log("chekcing the name of the website")
+    const path = window.location.pathname;
+    console.log(path);
+    return path
+  }
 
   loadHistory();
   clearTextbox();
-});
+;
