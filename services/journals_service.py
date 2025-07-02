@@ -15,7 +15,7 @@ def save_journal_entry(daily_text: str, response: dict):
     phq9 = response.get("phq9", "")
     gad7 = response.get("gad7", "")
     themes = response.get("themes", [])
-    emotions = response.get("emotions", [])
+    emotions = response.get("sentiment", [])
     feedback = response.get("feedback", "")
     
     print("above journal")
