@@ -9,15 +9,62 @@
 <body>
   <div class="option-container">
      <div class="header-row">
-    <a href="/"><h1>True North</h1></a>
+    <a href="/options"><h1>True North</h1></a>
     <p>Your heart's whispers become the compass for growth. Live light and travel deep.</p>
+      </div>
+  <div>
+   
+
+      
+
+<!-- Outer grid container for 2x2 layout -->
+<div class="grid-container">
+   {% set phq9 = journal.scores | selectattr('score_type', 'equalto', 'phq9') | first %}
+      {% set gad7 = journal.scores | selectattr('score_type', 'equalto', 'gad7') | first %}
+  <!-- Box 1: Themes -->
+  <div class="grid-item"> 
+    <h3>Themes</h3>
+    {% if journal.themes %}
+      <ul>
+        {% for theme in journal.themes %}
+          <li>{{ theme }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No themes extracted.</p>
+    {% endif %}
   </div>
-   <div class="grid-container">
-        <div class="grid-item">Top Left</div>
-        <div class="grid-item">Top Right</div>
-        <div class="grid-item">Bottom Left</div>
-        <div class="grid-item">Bottom Right</div>
-    </div>
+
+  <!-- Box 2: Emotions -->
+  <div class="grid-item">
+    <h3>Emotions</h3>
+    {% if journal.emotions %}
+      <ul>
+        {% for emotion in journal.emotions %}
+          <li>{{ emotion }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No emotions extracted.</p>
+    {% endif %}
+  </div>
+
+  <!-- Box 3: Feedback -->
+  <div class="grid-item">
+    <h3>Feedback</h3>
+    <p>{{ journal.feedback or "No feedback available." }}</p>
+  </div>
+
+  <!-- Box 4: Scores -->
+  <div class="grid-item">
+    <h3>Scores</h3>
+    <p><strong>PHQ9:</strong> {{ phq9.total_score if phq9 else '—' }} ({{ phq9.severity if phq9 else '—' }})</p>
+    <p><strong>GAD7:</strong> {{ gad7.total_score if gad7 else '—' }} ({{ gad7.severity if gad7 else '—' }})</p>
+  </div>
+
+</div>
+    
+
     <br><br>
     <div class="rst_history">
         <form action="/detailed_history" method="post">
