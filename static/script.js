@@ -1,21 +1,21 @@
-document.addEventListener("DOMContentLoaded", () => {
+console.log("chekcing the name of the website")
+const path = window.location.pathname;
+console.log(path);
+
+
+
+function checkbutton(){
+  if (path == "/journal"){
+    document.addEventListener("DOMContentLoaded", () => {
   // Save journal entry
-  const saveBtn = document.getElementById("saveButton");
-  if (saveBtn) {
-    saveBtn.addEventListener("click", saveJournalEntry);
-  }
+    const saveBtn = document.getElementById("saveButton");
+    if (saveBtn) {
+      saveBtn.addEventListener("click", saveJournalEntry);
+    }
+    loadHistory();
+  });
+  }}
 
-  // Load history
-  //const historyBtn = document.querySelector(".option.history");
-  //if (historyBtn) {
-  //  historyBtn.addEventListener("click", () => {
-  //    window.location.href = "history.html";
-  //  });
-  //}
-
-  // Load history list
-  loadHistory();
-});
 
 function saveJournalEntry() {
   const journalText = document.getElementById("journalInput").value.trim();
@@ -28,9 +28,8 @@ function saveJournalEntry() {
     .then(response => response.json())
     .then(data => {
       if (data.status === "success") {
-        alert("Journal entry saved!");
-        document.getElementById("journalInput").value = "";
-        loadHistory();
+        console.log(data.journal_id)
+        window.location.href = `/result/${data.journal_id}`;
       }
     })
     .catch(error => console.error('Error:', error));
@@ -70,8 +69,6 @@ function showDetailedEntry(entry) {
 
 function clearTextbox(){
     try {
-
-      path = checkName()
       if (path == "/journal"){
         console.log("inside cleartextbox");
         document.getElementById("journalInput").value = "";
@@ -85,13 +82,44 @@ function clearTextbox(){
     }
   }
 
-  function checkName(){
-    console.log("chekcing the name of the website")
-    const path = window.location.pathname;
-    console.log(path);
-    return path
+  function populateResult(){
+    console.log("inside populateResult");
+
   }
 
+function populateDetailedResult(){
+
+    if (path == "/detailed_history") {
+      console.log("inside detailed result")
+    fetch('/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: journalText }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === "success") {
+        alert("Journal entry saved!");
+        document.getElementById("journalInput").value = "";
+        loadHistory();
+      }
+    })
+    .catch(error => console.error('Error:', error));
+  } else {
+    alert("Please write something before saving.");
+  }
+
+  
+}
+
+function copyTextareaToHidden() {
+      const journalText = document.getElementById("journalInput").value;
+      document.getElementById("hiddenTextInput").value = journalText;
+    }
+  
   loadHistory();
   clearTextbox();
+  //checkbutton();
+  populateResult();
+
 ;

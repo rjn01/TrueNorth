@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import model
 import json
 from logger import logger
@@ -36,21 +36,13 @@ def options():
 # Route for journal page
 @app.route('/journal', methods=['GET', 'POST'])
 def journal():
-    if request.method == 'POST':
-        journal_text = request.form.get('journal_text', '')
-        if journal_text:
-            json_payload = {"entries": [journal_text]}
-            emotions = model.analyze_journal(json_payload)
-            logger.info(f"emotions : {emotions}")
-            save_journal_entry(journal_text, emotions)
-            return jsonify(status="success")
     return render_template('journal.html')
 
 # Route for result page
-@app.route('/result', methods=['GET', 'POST'])
-def resulthistory():
-    return render_template('result.html')
-
+#@app.route('/result', methods=['GET', 'POST'])
+#def resulthistory():
+#    return render_template('result.html')
+#
 
 @app.route('/history', methods=['GET', 'POST'])
 def history():
@@ -62,38 +54,51 @@ def detailed_history():
     return render_template('detailed_history.html')
 
 # API to submit journal entry
-@app.route('/submit', methods=['GET', 'POST'])
+@app.route('/submit', methods=['POST'])
 def submit():
-    logger.debug(f"Inside submit")
-    data = request.get_json()
-    journal_text = data.get('text', '')
+    logger.debug("Inside submit")
+
+    # Get text from HTML form (not JSON)
+    journal_text = request.form.get('text', '')
     logger.debug(f"Journal received: {journal_text}")
+    
     json_payload = {"entries": [journal_text]}
     logger.debug(f"json_payload : {json_payload}")
-    response = model.analyze_journal(json_payload)
-    # response = {
-    #     "phq9": {
-    #         "total_score": 9,
-    #         "severity": "mild"
-    #     },
-    #     "gad7": {
-    #         "total_score": 9,
-    #         "severity": "mild"
-    #     },
-    #     "themes": [
-    #         "feel anxious",
-    #         "trouble sleeping",
-    #         "anxious trouble"
-    #     ],
-    #     "emotions": [
-    #         "Joy", "Love", "Anger"
-    #     ],
-    #     "feedback": "No significant symptoms detected.",
-    #     "analysis_model": "RoBERTa-GoEmotions+KeyBERT+OPT-1.3b"
-    # }
+    
+    # Simulated model response
+    response = {
+        "phq9": {
+            "total_score": 9,
+            "severity": "mild"
+        },
+        "gad7": {
+            "total_score": 9,
+            "severity": "mild"
+        },
+        "themes": [
+            "feel anxious",
+            "trouble sleeping",
+            "anxious trouble"
+        ],
+        "emotions": [
+            "Joy", "Love", "Anger"
+        ],
+        "feedback": "No significant symptoms detected.",
+        "analysis_model": "RoBERTa-GoEmotions+KeyBERT+OPT-1.3b"
+    }
+
     logger.info(f"response : {response}")
-    save_journal_entry(journal_text, response)
-    return jsonify(status="success")
+
+    # Save journal and get ID
+    journal_id = save_journal_entry(journal_text, response)
+    journal_detail = get_journal_detail(journal_id)  # Make sure this returns correct data
+    
+    if not journal_detail:
+        return "Journal not found", 404
+    
+    return render_template('result.html', journal=journal_detail)
+
+
 
 # API to get journal list
 @app.route('/journalList', methods=['GET', 'POST'])
@@ -136,6 +141,21 @@ def summaryInputStreak():
     noOfInputStreak = get_summary_input_streak()
     print(noOfInputStreak)
     return jsonify(noOfInputStreak)
+
+@app.route('/result', methods=['POST'])
+def result_post():
+    print(" is it here?")
+    journal_id = save_journal_entry(request.form)
+    return redirect(url_for('result', journal_id=journal_id))
+
+@app.route('/result/<int:journal_id>', methods=['GET'])
+def result(journal_id):
+    print(" is it here or here?")
+    journal_detail = get_journal_detail(journal_id)
+    if not journal_detail:
+        return "Journal not found", 404
+    return render_template('result.html', journal=journal_detail)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

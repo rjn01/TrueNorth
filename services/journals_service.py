@@ -15,7 +15,7 @@ def save_journal_entry(daily_text: str, response: dict):
     phq9 = response.get("phq9", "")
     gad7 = response.get("gad7", "")
     themes = response.get("themes", [])
-    emotions = response.get("sentiment", [])
+    emotions = response.get("emotions", [])
     feedback = response.get("feedback", "")
     
     print("above journal")
@@ -58,6 +58,7 @@ def save_journal_entry(daily_text: str, response: dict):
 
     db.session.commit()
     print("Journal entry saved successfully.")
+    return journal.id
 
 def get_journal_list():
     sql = text("SELECT id, journal_input, created_time FROM journals")
