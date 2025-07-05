@@ -105,13 +105,13 @@ def submit():
 def journalList():
     getAllJournalInput = get_journal_list()
     print(getAllJournalInput)
-    return jsonify(getAllJournalInput)
+    return jsonify(get_journal_list())
 
 @app.route('/journalDetail/<int:journal_id>', methods=['GET'])
 def journal_detail(journal_id):
     journalDetail = get_journal_detail(journal_id)
     print(journalDetail)
-    return jsonify(journalDetail)
+    return jsonify(get_journal_detail(journal_id))
 
 @app.route('/summaryEmotionRange', methods=['GET', 'POST'])
 def summaryEmotionRange():
