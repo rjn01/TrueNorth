@@ -7,39 +7,30 @@
   <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
-  <!--<div class="container">
-    <h1>True North</h1>
-    <p>Truth leaves clues. Find rhythm in the silence.</p>
-    <div class="section" style="background-color: #b0a8b9;">
-      <h3>History</h3>
-      <ul id="historyList"></ul>
-    </div>
-  </div>-->
-  <div class="histcontainer">
+  <div class="detailedcontainer">
     <div class="header-row">
     <a href="/"><h1>True North</h1></a>
-    <p>Truth leaves clues. Find rhythm in the silence.</p>
+    <p>Memory ain't a map, it's a mirror. Clarity comes slow but hits hard.</p>
   </div>
-    <div class="rearview-container">
-      <div class="section history">
-        <h3>History</h3>
-      </div>
-      <div class="rearview" style="background-color: #4a6da7;">
-        <div class="rearview-section">
-          <h3>Emotional Range</h3>
-          <ul id="emotionalRange"></ul>
-        </div>
-        <div class="rearview-section">
-          <h3>Trail Marks</h3>
-          <ul id="trailMarks"></ul>
-        </div>
-        <div class="rearview-section">
-          <h3>Recent Risk Levels</h3>
-          <ul id="riskLevels"></ul>
-        </div>
-      </div>
-    </div>
+    <div class="history-grid" id="detailedHistory"></div>
   </div>
+
+  <div class="weekly-grid" id="weeklyGrid">
+    <ul id="weekly-day"></ul>
+  </div>
+
+  <!--<div class="weekly-grid" id="weeklyGrid">
+      <div class="weekly-day" data-day="Monday">Monday</div>
+      <div class="weekly-day" data-day="Tuesday">Tuesday</div>
+      <div class="weekly-day" data-day="Wednesday">Wednesday</div>
+      <div class="weekly-day" data-day="Thursday">Thursday</div>
+      <div class="weekly-day" data-day="Friday">Friday</div>
+      <div class="weekly-day" data-day="Saturday">Saturday</div>
+      <div class="weekly-day" data-day="Sunday">Sunday</div>
+    </div> -->
+  
+  
+
   <script src="../static/script.js"></script>
 </body>
 </html>
