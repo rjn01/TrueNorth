@@ -1,19 +1,48 @@
+@font-face {
+  font-family: 'Codec Pro';
+  src: url('/static/fonts/CodecPro-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Codec Pro';
+  src: url('/static/fonts/CodecPro-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Codec Pro';
+  src: url('/static/fonts/CodecPro-Light.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Codec Pro', Arial, sans-serif;
+  font-weight: normal;
   background-color: #000;
   color: #fff;
+  
 }
 
 h1 {
   font-size: 3em;
   margin-bottom: 10px;
+  font-family: 'Codec Pro', Arial, sans-serif;
+  font-weight: 800;
 }
 
 p {
   font-size: 1.2em;
   margin-bottom: 20px;
+  font-family: 'Codec Pro', Arial, sans-serif;
+  font-weight: normal;
 }
 
 button {
@@ -24,6 +53,7 @@ button {
   cursor: pointer;
   border-radius: 5px;
   margin-top: 10px;
+  font-family: 'Codec Pro', Arial, sans-serif;
 }
 
 .option {
@@ -80,31 +110,39 @@ textarea {
   background-color: #444;
 }
 
-.container,
-.journal-text-body {
-  margin: 0;
-  height: 450px;
+.container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: auto; /* or a fixed height if needed */
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-  
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-.container a, 
+.container a{
+  color: #ffffff;
+  text-decoration: none;
+}
 .option-container a,
 .journal-container a,
 .histcontainer a,
 .detailedcontainer a {
-  color: white;
-   text-decoration: none;
+  color: #ffffff;
+  text-decoration: none;
 }
 .container h1 {
-  font-size: 10rem; /* or any value like 48px */
+  font-size: 4.5rem; /* or any value like 48px */
+  padding: 20px;
 }
 .container p,
 .detailedcontainer p {
-  font-size: 2rem; /* or any value like 48px */
+  font-size: 1.3rem; /* or any value like 48px */
+  font-weight: 800;
+  padding: 20px;
 }
 .option-container {
   min-height: 50vh;       /* Take full viewport height */
@@ -124,26 +162,21 @@ textarea {
   justify-content: flex-start;
   gap: 100px;
   padding: 40px;
+  color: #ffffff;
 }
 
 .header-row h1 {
-  font-size: 5rem;
+  font-size: 3rem;
   margin: 0;
   white-space: nowrap;
 }
 
 .header-row p {
   font-size: 1.2rem;
-  color: #444;
+  color: #ffffff;
   flex: 1;
   margin: 0;
   min-width: 200px;
-}
-.options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
 }
 
 .options form,
@@ -151,14 +184,47 @@ textarea {
   flex: 1 1 300px; /* Responsive: takes at least 300px width, then grows */
 
 }
+
+/*Page Input Journal START */
+.journal-text-body {
+  margin: 0;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 .journal-buttons {
   display: flex;
   justify-content: center;  /* center buttons horizontally */
-  gap: 20px;                 /* space between the buttons */
-  margin-top: 30px;          /* optional spacing from content above */
+  margin-top: 20px;          /* optional spacing from content above */
 }
 
-.nav-btn {
+#journalInput{
+  border-color: #97C858;
+  margin-top: 60px;
+  border-width: 10px;
+}
+
+#saveButton,
+#SummaryButton {
+  padding: 10px;
+  font-size: 18px;
+  color: rgb(0, 0, 0);
+  border: none;
+  cursor: pointer;
+  height:50px;
+  background: #97C858;
+  font-weight: 800;
+  width: 1050px;
+  transition: box-shadow 1s ease-in-out;
+}
+#saveButton:hover {
+  box-shadow: 0 0 15px 4px #ffffbecc;
+}
+/*Page Input Journal END */
+
+/*.nav-btn {
   width: 100%;
   padding: 20px;
   font-size: 50px;
@@ -168,52 +234,100 @@ textarea {
   cursor: pointer;
   height:100px;
   background: linear-gradient(45deg, #a3a3d9, #4a6da7);
+  font-weight: 800;
+}*/
 
-}
-#saveButton,
-#SummaryButton {
-  padding: 10px;
-  font-size: 20px;
+/*WELCOME PAGE START*/
+.nav-btn {
+  width: 230px;
+  height: 70px;              /* Fixed height */
+  padding: 0 20px;            /* Horizontal padding only */
+  font-size: 18px;            /* Large text */
+  line-height: 1;             /* Prevent font from stretching height */
   color: white;
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  height:50px;
-  background: linear-gradient(45deg, #a3a3d9, #4a6da7);
+  background: linear-gradient(90deg, #C6A598, #293184);
+  font-weight: 800;
+  display: flex;              /* Optional: center text vertically */
+  align-items: center;        /* Vertical centering */
+  justify-content: center;    /* Horizontal centering */
+  transition: box-shadow 1s ease-in-out;
+}
 
+.nav-btn:hover {
+  /*background: linear-gradient(90deg, #293184, #C6A598);
+  color: #000;*/
+  /*box-shadow: 0 0 10px 2px #8dc4ffcc;*/
+  box-shadow: 0 0 15px 4px #ffffbecc;
+}
+
+/*WELCOME PAGE END*/
+
+/*OPTION PAGE START*/
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
 .green-btn {
-  width: 100%;
+  width: 75%;
   padding: 30px;
-  font-size: 50px;
+  font-size: 40px;
+  font-weight: 800;
   color: white;
-  border: none;
-  border-radius: 12px;
+  border: 5px solid #ffffff; 
+  border-radius: 50px;
   cursor: pointer;
-  height: 300px;
-  background-color: #a3d9a3;
+  height: 370px;
+  background-color: #97C858;
+  /* background-color: #a3d9a3; */
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: box-shadow 1s ease-in-out;
+}
+
+.green-btn:hover {
+  /*background: #a3d9a3;
+  color: #000;
+  border: 5px solid #000000; */
+  box-shadow: 0 0 15px 4px #ffffbecc;
 }
 
 .blue-btn {
-  width: 100%;
+  width: 75%;
   padding: 30px;
-  font-size: 50px;
+  font-size: 40px;
+  font-weight: 800;
   color: white;
-  border: none;
-  border-radius: 12px;
+  border: 5px solid #ffffff; 
+  border-radius: 50px;
   cursor: pointer;
-  height: 300px;
-  background-color: #4a6da7;
+  height: 370px;
+  /*background-color: #4a6da7;*/
+  background-color: #252E83;
+  transition: box-shadow 1s ease-in-out;
 }
+.blue-btn:hover {
+  /*background: #4a6da7;;
+  color: #000;
+  border: 5px solid #000000; */
+  box-shadow: 0 0 15px 4px #ffffbecc;
+}
+/*OPTION PAGE END*/
 
-.grid-container {
+/*.grid-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   height: 600px;
   width: 1200px;
-  gap: 20px; /* ← This adds space between all rows and columns */
+  gap: 20px;
 }
 
 
@@ -229,7 +343,60 @@ textarea {
 .grid-item:nth-child(1) { background: #1abc9c; }
 .grid-item:nth-child(2) { background: #3498db; }
 .grid-item:nth-child(3) { background: #e67e22; }
-.grid-item:nth-child(4) { background: #9b59b6; }
+.grid-item:nth-child(4) { background: #9b59b6; }*/
+
+/*JOURNAL DETAILS START*/
+.grid-container {
+  display: grid;
+  width: 95%;
+  max-width: 1200px;
+  margin: auto;
+  /*height: 600px;*/
+  height: 60vh;
+  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "input input score"
+    "emotions feedback themes";
+}
+.grid-item {
+  padding: 10px;
+  background: #97C858;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 7px solid #97C858; 
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+  color: #000;
+
+  line-height: 1.4;          /* space between lines */
+  letter-spacing: 0.5px;     /* space between letters (adjust as needed) */
+  font-size: 16px;           /* optional: bump font size if needed */
+}
+.score {
+  grid-area: score;
+  border-color: #FF3833; 
+  background: #FF3833;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center; 
+}
+
+.input {
+  grid-area: input;
+  background: black;
+  color: white;
+}
+
+.input    { grid-area: input; }
+.emotions { grid-area: emotions; }
+.feedback { grid-area: feedback; }
+.themes   { grid-area: themes; }
+
+/*JOURNAL DETAILS END*/
 
 .rst_history {
   width: 100%; /* or any fixed width you prefer */
@@ -254,20 +421,91 @@ textarea {
 /* New styles for Rearview layout */
 .rearview-container {
   display: flex;
-  width: 80%;
-  margin: 20px auto;
-  background-color:  #b0a8b9;
+  width: 95%;
+  margin: 10px auto;
+  background-color:  #000000;
+
+  display: flex;
+  height: 73vh; /* full height if needed */
+  gap: 70px; /* adds significant space between the two panels */
+}
+
+.rearview-history {
+  width: 20%;
+  padding: 20px;
+  background-color: #C2B5B3; /* optional: make it visually distinct */
+  color: #ffffff;
+  cursor: pointer;
+  border: 5px solid #ffffff; /* add white border */
+  box-sizing: border-box;  /* ensures border doesn't overflow */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: box-shadow 1s ease-in-out;
+}
+
+.rearview-history:hover {
+  box-shadow: 0 0 15px 4px #ffffbecc;
 }
 
 .rearview {
   flex-grow: 1;
   display: flex;
+  gap: 50px;
   justify-content: space-between;
   padding: 20px;
-  border: 2px solid #fff;
+  border: 5px solid #fff;
+
+  width: 80%;
+  padding: 20px;
+  background-color: #252E83;
+  color: white;
+  overflow-y: auto; /* scroll if content overflows */
 }
 
 .rearview-section {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Fill parent's height */
+}
+
+.rearview-section h3{
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.rearview h3 {
+  margin-bottom: 10px;
+}
+
+.rearview-history h3 {
+  font-size: 2rem; /* adjust as needed: 3rem = very big */
+  margin: 0; /* remove default spacing */
+  color: #000000;
+}
+#history-button {
+  color: #000;
+  text-align: justify;
+}
+
+.emotion-range-list,.trail-marks{
+  background: #000000;
+  height: 80%;
+  
+  flex-shrink: 0; /* prevent shrinking */
+  font-size: 1em;
+  padding: 10px; /* add padding on all sides */
+  padding-left: 50px;
+  box-sizing: border-box; /* ensures padding doesn't overflow the height */
+  border-radius: 40px; /* optional: for slightly rounded corners */
+  line-height: 1.3;
+}
+
+
+/*.rearview-section {
   flex: 1;
   margin: 0 10px;
 }
@@ -283,27 +521,93 @@ textarea {
 
 .rearview-section li {
   padding: 5px 0;
-}
+}*/
 
-
+/*JOURNAL LIST START*/
 .weekly-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
-  width: 90%;
-  margin: 20px auto;
-  height: 100vh;
-}
-
-.weekly-day {
-  padding: 15px;
-  border: 2px solid #fff;
-  background: #333;
-  text-align: center;
-  min-height: 150px;
+  width: 95%;              /* width 90% */
+  height: 60vh;            /* height 90% of viewport height */
+  max-width: none;         /* remove max-width if any */
+  margin: auto;            /* shorthand for top/bottom + left/right auto centering */
+  
+  /* To center vertically + horizontally using Flexbox on parent (body) */
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
+  border: 1px solid #000000;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
-.weekly-day.empty {
-  color: #666;
+#weekly-day {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+  grid-auto-rows: 250px;                  /* height of each box (adjust as needed) */
+  gap: 50px;                             /* gap between boxes */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#weekly-day li {
+  background: #000000;
+  border: 3px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 200;
+
+   /* Add these: */
+  overflow: hidden;           /* hide overflowing text */
+  text-overflow: ellipsis;    /* show ... at end */
+  display: -webkit-box;       /* for multiline truncation */
+  -webkit-line-clamp: 4;      /* number of lines to show */
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;      /* break long words */
+
+  padding: 10px;  /* adjust this value to control distance */
+  box-sizing: border-box;  /* ensures padding doesn’t increase total size */
+  padding-bottom: 10px;
+
+  line-height: 1.6;          /* space between lines */
+  letter-spacing: 0.5px;     /* space between letters (adjust as needed) */
+  font-size: 18px;           /* optional: bump font size if needed */
+  text-align: center;        /* optional: center-align for aesthetics */
+  transition: box-shadow 1s ease-in-out;
+}
+
+#weekly-day li:hover {
+  box-shadow: 0 0 15px 4px #ffffbecc;
+}
+
+/* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+.weekly-grid::-webkit-scrollbar {
+  width: 6px;                  /* Make it thinner or set to 0 to fully hide */
+}
+
+.weekly-grid::-webkit-scrollbar-track {
+  background: transparent;     /* Track color */
+}
+
+.weekly-grid::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);  /* Thumb color (light and subtle) */
+  border-radius: 3px;
+}
+
+/* Firefox scrollbar styling */
+.weekly-grid {
+  scrollbar-width: thin;           /* Make it thinner */
+  scrollbar-color: rgba(255,255,255,0.3) transparent;
+}
+/*JOURNAL LIST END*/
+.tagline {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+  color: #fff;
+  font-weight: 800;
+}
+
+.td{
+  font-size: 1.2em;
+  color: #fff;
 }

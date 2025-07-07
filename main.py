@@ -51,15 +51,14 @@ def journal():
 def resulthistory():
     return render_template('result.html')
 
-
-@app.route('/history', methods=['GET', 'POST'])
-def history():
-    print("Inside history to natigate")
-    return render_template('history.html')
+@app.route('/rearview', methods=['GET', 'POST'])
+def rearview():
+    print("Inside rearview to natigate")
+    return render_template('rearview.html')
 # Route for detailed history page
-@app.route('/detailed_history',methods=['GET', 'POST'])
-def detailed_history():
-    return render_template('detailed_history.html')
+@app.route('/history',methods=['GET', 'POST'])
+def history():
+    return render_template('history.html')
 
 # API to submit journal entry
 @app.route('/submit', methods=['GET', 'POST'])
@@ -70,30 +69,33 @@ def submit():
     logger.debug(f"Journal received: {journal_text}")
     json_payload = {"entries": [journal_text]}
     logger.debug(f"json_payload : {json_payload}")
-    response = model.analyze_journal(json_payload)
-    # response = {
-    #     "phq9": {
-    #         "total_score": 9,
-    #         "severity": "mild"
-    #     },
-    #     "gad7": {
-    #         "total_score": 9,
-    #         "severity": "mild"
-    #     },
-    #     "themes": [
-    #         "feel anxious",
-    #         "trouble sleeping",
-    #         "anxious trouble"
-    #     ],
-    #     "emotions": [
-    #         "Joy", "Love", "Anger"
-    #     ],
-    #     "feedback": "No significant symptoms detected.",
-    #     "analysis_model": "RoBERTa-GoEmotions+KeyBERT+OPT-1.3b"
-    # }
+    #response = model.analyze_journal(json_payload)
+    response = {
+         "phq9": {
+             "total_score": 9,
+             "severity": "mild"
+         },
+         "gad7": {
+             "total_score": 9,
+             "severity": "mild"
+         },
+         "themes": [
+             "feel anxious",
+             "trouble sleeping",
+             "anxious trouble"
+         ],
+         "emotions": [
+             "Joy", "Love", "Anger"
+         ],
+         "feedback": "No significant symptoms detected.",
+         "analysis_model": "RoBERTa-GoEmotions+KeyBERT+OPT-1.3b"
+    }
     logger.info(f"response : {response}")
-    save_journal_entry(journal_text, response)
-    return jsonify(status="success")
+    #save_journal_entry(journal_text, response)
+    #return jsonify(status="success")
+    journal_id = save_journal_entry(journal_text, response)
+    
+    return jsonify(status="success", journal_id=journal_id)
 
 # API to get journal list
 @app.route('/journalList', methods=['GET', 'POST'])
@@ -105,6 +107,7 @@ def journalList():
 @app.route('/journalDetail/<int:journal_id>', methods=['GET'])
 def journal_detail(journal_id):
     journalDetail = get_journal_detail(journal_id)
+    #return render_template('result.html', entry=journalDetail)
     print(journalDetail)
     return jsonify(journalDetail)
 

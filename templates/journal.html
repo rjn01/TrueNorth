@@ -8,30 +8,28 @@
 </head>
 <body>
   <div class="journal-container">
-     <div class="header-row">
-    <a href="/"><h1>True North</h1></a>
-    <p>You are the author of your life. Turn the page, own the story.</p>
-  </div>
+    <div class="header-row">
+      <a href="/"><h1>True North</h1></a>
+      <p class="tagline">You are the author of your life. Turn the page, own the story.</p>
+    </div>
   </div>
   <div class="journal-text-body">
     <textarea id="journalInput" placeholder="Lay down that fresh entry. Put it down and see what shows up..."></textarea>
     <!--<button id="saveButton">Save Entry</button>
     <button id="SummaryButton">Summary</button>-->
-    
-
   </div>
   <div class="journal-buttons">
       <div>
-        <form action="/result" method="post">
-        <button id="saveButton" type="submit" >Save Entry</button>
+        <!--<form action="/result" method="post">-->
+        <button id="saveButton" type="submit" >Submit</button>
       </form>
       </div>
       
-      <div>
-        <form action="/detailed_history" method="post">
+      <!-- <div>
+        <form action="/history" method="post">
           <button id="SummaryButton" type="submit" >Summary</button>
         </form>
-      </div>
+      </div> -->
       
 
     </div>

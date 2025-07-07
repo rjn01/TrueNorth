@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>True North - Rearview</title>
+  <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+  <!--<div class="histcontainer">-->
+  <div class="option-container">
+    <div class="header-row">
+      <a href="/"><h1>True North</h1></a>
+      <p class="tagline">Truth leaves clues. Find rhythm in the silence.</p>
+    </div>
+    <div class="rearview-container">
+      <div class="rearview-history" id="history-button" style="cursor: pointer;">
+        <h3>History</h3>
+      </div>
+
+      <div class="rearview" style="background-color: #252E83;">
+        <div class="rearview-section rearview-section-emotion">
+          <h3>Emotional Range</h3>
+          <div class="emotion-range-list">
+            <ul id="emotionalRange"></ul>
+          </div>
+        </div>
+        <div class="rearview-section rearview-section-trail">
+          <h3>Trail Marks</h3>
+          <div class="trail-marks">
+            Story Shared:
+              <ul id="total-entry"></ul>
+            Running Storylines:
+              <ul id="top-themes"></ul>
+            The roll:
+              <ul id="input-streak"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../static/script.js"></script>
+</body>
+</html>

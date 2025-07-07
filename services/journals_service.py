@@ -58,6 +58,7 @@ def save_journal_entry(daily_text: str, response: dict):
 
     db.session.commit()
     print("Journal entry saved successfully.")
+    return journal.id
 
 def get_journal_list():
     sql = text("SELECT id, journal_input, created_time FROM journals")
