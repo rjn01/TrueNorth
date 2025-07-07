@@ -181,7 +181,7 @@ function journalHistoryList(){
       data.forEach(item => {
         const li = document.createElement('li');
         //li.textContent = `Date: ${item.created_time}:<br>Entry: ${item.journal_input}`;
-        li.innerHTML = `<b>Date:</b><br> ${item.created_time}:<br><br><b>Entry:</b><br> ${item.journal_input}`;
+        li.innerHTML = `<b>${item.created_time}</b><br><br>${item.journal_input}`;
 
         li.dataset.id = item.id;
         li.style.cursor = 'pointer';
@@ -250,10 +250,10 @@ function historyButtonOnClick(){
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const saveBtn = document.getElementById("saveButton");
+  /*const saveBtn = document.getElementById("saveButton");
   if (saveBtn) {
     saveBtn.addEventListener("click", saveJournalEntry);
-  }
+  }*/
 
   // Load history
   //const historyBtn = document.querySelector(".option.history");
@@ -293,31 +293,32 @@ document.addEventListener('DOMContentLoaded', () => {
   
 });
 
-document.getElementById('saveButton').addEventListener('click', function() {
+document.addEventListener('DOMContentLoaded', function () {
+  const saveButton = document.getElementById('saveButton');
+  if (saveButton) {
+    saveButton.addEventListener('click', function () {
       const journalText = document.getElementById('journalInput').value.trim();
-      /*if (!journalText) {
-        alert("Please write something before saving.");
-        return;
-      }*/
-
+      
       fetch('/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: journalText }),
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === "success") {
-          //alert("Journal entry saved!");
-          document.getElementById("journalInput").value = "";
-
-          window.location.href = `/result?id=${data.journal_id}`;
-        } else {
-          alert("Failed to save journal entry.");
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert("Error saving journal entry.");
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success") {
+            document.getElementById("journalInput").value = "";
+            window.location.href = `/result?id=${data.journal_id}`;
+          } else {
+            alert("Failed to save journal entry.");
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert("Error saving journal entry.");
+        });
     });
+  } else {
+    console.error("Element with ID 'saveButton' not found.");
+  }
+});

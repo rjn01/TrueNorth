@@ -13,6 +13,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Codec Pro';
+  src: url('/static/fonts/CodecPro-Light.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -115,16 +123,6 @@ textarea {
   text-align: center;
 }
 
-
-.journal-text-body {
-  margin: 0;
-  height: 450px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
 .container a{
   color: #ffffff;
   text-decoration: none;
@@ -180,24 +178,51 @@ textarea {
   margin: 0;
   min-width: 200px;
 }
-.options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
 
 .options form,
 .journal-buttons form {
   flex: 1 1 300px; /* Responsive: takes at least 300px width, then grows */
 
 }
+
+/*Page Input Journal START */
+.journal-text-body {
+  margin: 0;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 .journal-buttons {
   display: flex;
   justify-content: center;  /* center buttons horizontally */
-  gap: 20px;                 /* space between the buttons */
-  margin-top: 30px;          /* optional spacing from content above */
+  margin-top: 20px;          /* optional spacing from content above */
 }
+
+#journalInput{
+  border-color: #97C858;
+  margin-top: 60px;
+  border-width: 10px;
+}
+
+#saveButton,
+#SummaryButton {
+  padding: 10px;
+  font-size: 18px;
+  color: rgb(0, 0, 0);
+  border: none;
+  cursor: pointer;
+  height:50px;
+  background: #97C858;
+  font-weight: 800;
+  width: 1050px;
+  transition: box-shadow 1s ease-in-out;
+}
+#saveButton:hover {
+  box-shadow: 0 0 15px 4px #ffffbecc;
+}
+/*Page Input Journal END */
 
 /*.nav-btn {
   width: 100%;
@@ -211,6 +236,8 @@ textarea {
   background: linear-gradient(45deg, #a3a3d9, #4a6da7);
   font-weight: 800;
 }*/
+
+/*WELCOME PAGE START*/
 .nav-btn {
   width: 230px;
   height: 70px;              /* Fixed height */
@@ -226,24 +253,24 @@ textarea {
   display: flex;              /* Optional: center text vertically */
   align-items: center;        /* Vertical centering */
   justify-content: center;    /* Horizontal centering */
+  transition: box-shadow 1s ease-in-out;
 }
 
 .nav-btn:hover {
-  background: linear-gradient(90deg, #293184, #C6A598);
-  color: #000;
+  /*background: linear-gradient(90deg, #293184, #C6A598);
+  color: #000;*/
+  /*box-shadow: 0 0 10px 2px #8dc4ffcc;*/
+  box-shadow: 0 0 15px 4px #ffffbecc;
 }
 
-#saveButton,
-#SummaryButton {
-  padding: 10px;
-  font-size: 20px;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  height:50px;
-  background: linear-gradient(45deg, #a3a3d9, #4a6da7);
+/*WELCOME PAGE END*/
 
+/*OPTION PAGE START*/
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
 .green-btn {
@@ -258,12 +285,18 @@ textarea {
   height: 370px;
   background-color: #97C858;
   /* background-color: #a3d9a3; */
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: box-shadow 1s ease-in-out;
 }
 
 .green-btn:hover {
-  background: #a3d9a3;
+  /*background: #a3d9a3;
   color: #000;
-  border: 5px solid #000000; 
+  border: 5px solid #000000; */
+  box-shadow: 0 0 15px 4px #ffffbecc;
 }
 
 .blue-btn {
@@ -278,12 +311,16 @@ textarea {
   height: 370px;
   /*background-color: #4a6da7;*/
   background-color: #252E83;
+  transition: box-shadow 1s ease-in-out;
 }
 .blue-btn:hover {
-  background: #4a6da7;;
+  /*background: #4a6da7;;
   color: #000;
-  border: 5px solid #000000; 
+  border: 5px solid #000000; */
+  box-shadow: 0 0 15px 4px #ffffbecc;
 }
+/*OPTION PAGE END*/
+
 /*.grid-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -331,6 +368,10 @@ textarea {
   border: 7px solid #97C858; 
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
   color: #000;
+
+  line-height: 1.4;          /* space between lines */
+  letter-spacing: 0.5px;     /* space between letters (adjust as needed) */
+  font-size: 16px;           /* optional: bump font size if needed */
 }
 .score {
   grid-area: score;
@@ -380,14 +421,13 @@ textarea {
 /* New styles for Rearview layout */
 .rearview-container {
   display: flex;
-  width: 80%;
-  margin: 20px auto;
+  width: 95%;
+  margin: 10px auto;
   background-color:  #000000;
 
   display: flex;
-  width: 80%;
-  height: 60vh; /* full height if needed */
-  gap: 100px; /* adds significant space between the two panels */
+  height: 73vh; /* full height if needed */
+  gap: 70px; /* adds significant space between the two panels */
 }
 
 .rearview-history {
@@ -403,11 +443,11 @@ textarea {
   align-items: center;
   justify-content: center;
   text-align: center;
+  transition: box-shadow 1s ease-in-out;
 }
 
 .rearview-history:hover {
-  background-color: #cccccc;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 0 15px 4px #ffffbecc;
 }
 
 .rearview {
@@ -456,7 +496,7 @@ textarea {
   height: 80%;
   
   flex-shrink: 0; /* prevent shrinking */
-  font-size: 1.2em;
+  font-size: 1em;
   padding: 10px; /* add padding on all sides */
   padding-left: 50px;
   box-sizing: border-box; /* ensures padding doesn't overflow the height */
@@ -502,8 +542,8 @@ textarea {
 #weekly-day {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
-  grid-auto-rows: 140px;                  /* height of each box (adjust as needed) */
-  gap: 20px;                             /* gap between boxes */
+  grid-auto-rows: 250px;                  /* height of each box (adjust as needed) */
+  gap: 50px;                             /* gap between boxes */
   list-style: none;
   margin: 0;
   padding: 0;
@@ -511,12 +551,11 @@ textarea {
 
 #weekly-day li {
   background: #000000;
-  border: 5px solid #ffffff;
+  border: 3px solid #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  border-radius: 6px;
+  font-weight: 200;
 
    /* Add these: */
   overflow: hidden;           /* hide overflowing text */
@@ -529,6 +568,16 @@ textarea {
   padding: 10px;  /* adjust this value to control distance */
   box-sizing: border-box;  /* ensures padding doesn’t increase total size */
   padding-bottom: 10px;
+
+  line-height: 1.6;          /* space between lines */
+  letter-spacing: 0.5px;     /* space between letters (adjust as needed) */
+  font-size: 18px;           /* optional: bump font size if needed */
+  text-align: center;        /* optional: center-align for aesthetics */
+  transition: box-shadow 1s ease-in-out;
+}
+
+#weekly-day li:hover {
+  box-shadow: 0 0 15px 4px #ffffbecc;
 }
 
 /* Hide scrollbar for WebKit browsers (Chrome, Safari) */

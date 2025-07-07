@@ -91,7 +91,7 @@ def submit():
          "analysis_model": "RoBERTa-GoEmotions+KeyBERT+OPT-1.3b"
     }
     logger.info(f"response : {response}")
-    save_journal_entry(journal_text, response)
+    #save_journal_entry(journal_text, response)
     #return jsonify(status="success")
     journal_id = save_journal_entry(journal_text, response)
     
