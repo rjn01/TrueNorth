@@ -69,27 +69,28 @@ def submit():
     logger.debug(f"Journal received: {journal_text}")
     json_payload = {"entries": [journal_text]}
     logger.debug(f"json_payload : {json_payload}")
-    #response = model.analyze_journal(json_payload)
-    response = {
-         "phq9": {
-             "total_score": 9,
-             "severity": "mild"
-         },
-         "gad7": {
-             "total_score": 9,
-             "severity": "mild"
-         },
-         "themes": [
-             "feel anxious",
-             "trouble sleeping",
-             "anxious trouble"
-         ],
-         "emotions": [
-             "Joy", "Love", "Anger"
-         ],
-         "feedback": "No significant symptoms detected.",
-         "analysis_model": "RoBERTa-GoEmotions+KeyBERT+OPT-1.3b"
-    }
+    response = model.analyze_journal(json_payload)
+    #response = {
+    #     "phq9": {
+    #         "total_score": 9,
+    #         "severity": "mild"
+    #     },
+    #     "gad7": {
+    #         "total_score": 9,
+    #         "severity": "mild"
+    #     },
+    #     "themes": [
+    #         "feel anxious",
+    #         "trouble sleeping",
+    #         "anxious trouble"
+    #     ],
+    #     "emotions": [
+    #         "Joy", "Love", "Anger"
+    #     ],
+    #     "feedback": "No significant symptoms detected.",
+    #     "analysis_model": "RoBERTa-GoEmotions+KeyBERT+OPT-1.3b"
+    #}
+    print(f"response : {response}")
     logger.info(f"response : {response}")
     #save_journal_entry(journal_text, response)
     #return jsonify(status="success")
