@@ -174,8 +174,8 @@ def analyze_journal(data: JournalRequest):
 
 
     return {
-        "phq9": scores["phq9"],
-        "gad7": scores["gad7"],
+        "depression": scores["phq9"],
+        "anxiety": scores["gad7"],
         "themes": themes,
         "emotions": emotions,
         "feedback": feedback

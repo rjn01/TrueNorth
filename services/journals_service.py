@@ -12,8 +12,8 @@ encryption = EncryptionManager()
 
 def save_journal_entry(daily_text: str, response: dict):
     print("inside save journal")
-    phq9 = response.get("phq9", "")
-    gad7 = response.get("gad7", "")
+    phq9 = response.get("depression", "")
+    gad7 = response.get("anxiety", "")
     themes = response.get("themes", [])
     emotions = response.get("emotions", [])
     feedback = response.get("feedback", "")
@@ -33,7 +33,7 @@ def save_journal_entry(daily_text: str, response: dict):
             journal_id=journal.id,
             severity=encryption.encrypt(phq9.get("severity")),
             total_score=encryption.encrypt(phq9.get("total_score")),
-            score_type="phq9",
+            score_type="depression",
             created_time=datetime.utcnow()
         )
         db.session.add(score)
@@ -43,7 +43,7 @@ def save_journal_entry(daily_text: str, response: dict):
             journal_id=journal.id,
             severity=encryption.encrypt(gad7.get("severity")),
             total_score=encryption.encrypt(gad7.get("total_score")),
-            score_type="gad7",
+            score_type="anxiety",
             created_time=datetime.utcnow()
         )
         db.session.add(score)
