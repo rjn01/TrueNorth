@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Signup – True North</title>
+  <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>True North</h1>
+    <p>Create your account</p>
+
+    <form id="signupForm">
+      <input placeholder="Username" required id="username"><br><br>
+      <input placeholder="Email" required id="email"><br><br>
+      <input type="password" placeholder="Password" required id="password"><br><br>
+      <button class="nav-btn">Sign Up</button>
+    </form>
+
+    <p id="error" style="color:red;"></p>
+  </div>
+
+<script>
+document.getElementById("signupForm").onsubmit = async e => {
+  e.preventDefault();
+  const res = await fetch("/signup", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      username: username.value,
+      email: email.value,
+      password: password.value
+    })
+  });
+
+  if (res.ok) location.href = "/login";
+  else error.textContent = "User already exists";
+};
+</script>
+</body>
+</html>

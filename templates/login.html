@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login – True North</title>
+  <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>True North</h1>
+    <p>Welcome back</p>
+
+    <form id="loginForm">
+      <input placeholder="Username" required id="username"><br><br>
+      <input type="password" placeholder="Password" required id="password"><br><br>
+      <button class="nav-btn">Login</button>
+    </form>
+
+    <p>
+      New here? <a href="/signup">Create account</a>
+    </p>
+
+    <p id="error" style="color:red;"></p>
+  </div>
+
+<script>
+document.getElementById("loginForm").onsubmit = async e => {
+  e.preventDefault();
+  const res = await fetch("/login", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      username: username.value,
+      password: password.value
+    })
+  });
+
+  if (res.ok) location.href = "/";
+  else error.textContent = "Invalid credentials";
+};
+</script>
+</body>
+</html>

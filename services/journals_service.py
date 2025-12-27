@@ -18,6 +18,7 @@ def save_journal_entry(daily_text: str, response: dict):
     emotions = response.get("emotions", [])
     feedback = response.get("feedback", "")
     
+    
     print("above journal")
     journal = Journal(
         journal_input=encryption.encrypt(daily_text),

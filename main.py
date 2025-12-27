@@ -1,145 +1,177 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session, redirect
+from functools import wraps
+from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import text
 import model
-import json
 from logger import logger
 from dotenv import load_dotenv
 import os
 from utils.encryption_utils import set_encryption_key
 
 set_encryption_key()
-load_dotenv()  # load env file
+load_dotenv()
 
-from models import db  # load the ORM
-from services.journals_service import save_journal_entry, get_journal_detail, get_journal_list, get_summary_total_entry_days, get_summary_input_streak
+from models import db
+from services.journals_service import (
+    save_journal_entry,
+    get_journal_detail,
+    get_journal_list,
+    get_summary_total_entry_days,
+    get_summary_input_streak
+)
 from services.emotions_service import get_summary_emotion_range
 from services.themes_service import get_summary_top_3_theme
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")  # reading DB config
+# ---------------- CONFIG ----------------
+app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-logger.debug(f"checking if it is reading database url: {os.getenv('DATABASE_URL')}")
 
 db.init_app(app)
 
-# Route for welcome page
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/welcome', methods=['GET', 'POST'])
+# ---------------- AUTH DECORATOR ----------------
+def login_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not session.get("user_id"):
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated
+
+# ---------------- AUTH PAGES ----------------
+@app.route("/login", methods=["GET"])
+def login_page():
+    return render_template("login.html")
+
+@app.route("/signup", methods=["GET"])
+def signup_page():
+    return render_template("signup.html")
+
+# ---------------- AUTH APIs ----------------
+@app.route("/signup", methods=["POST"])
+def signup():
+    data = request.get_json()
+    username = data["username"]
+    email = data["email"]
+    password = data["password"]
+
+    password_hash = generate_password_hash(password)
+
+    try:
+        db.session.execute(
+            text("""
+                INSERT INTO users (username, email, password_hash)
+                VALUES (:username, :email, :password_hash)
+            """),
+            {
+                "username": username,
+                "email": email,
+                "password_hash": password_hash
+            }
+        )
+        db.session.commit()
+        return jsonify(success=True)
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(success=False, error="User already exists"), 400
+
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    username = data["username"]
+    password = data["password"]
+
+    user = db.session.execute(
+        text("SELECT id, password_hash FROM users WHERE username=:username"),
+        {"username": username}
+    ).fetchone()
+
+    if user and check_password_hash(user.password_hash, password):
+        session["user_id"] = user.id
+        return jsonify(success=True)
+
+    return jsonify(success=False), 401
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
+
+# ---------------- PAGES ----------------
+@app.route('/')
+@app.route('/welcome')
+@login_required
 def welcome():
     return render_template('welcome.html')
 
-# Route for options page
 @app.route('/options', methods=['GET', 'POST'])
+@login_required
 def options():
     return render_template('options.html')
 
-# Route for journal page
 @app.route('/journal', methods=['GET', 'POST'])
+@login_required
 def journal():
-    if request.method == 'POST':
-        journal_text = request.form.get('journal_text', '')
-        if journal_text:
-            json_payload = {"entries": [journal_text]}
-            emotions = model.analyze_journal(json_payload)
-            logger.info(f"emotions : {emotions}")
-            save_journal_entry(journal_text, emotions)
-            return jsonify(status="success")
     return render_template('journal.html')
 
-# Route for result page
 @app.route('/result', methods=['GET', 'POST'])
+@login_required
 def resulthistory():
     return render_template('result.html')
 
 @app.route('/rearview', methods=['GET', 'POST'])
+@login_required
 def rearview():
-    print("Inside rearview to natigate")
     return render_template('rearview.html')
-# Route for detailed history page
-@app.route('/history',methods=['GET', 'POST'])
+
+@app.route('/history', methods=['GET', 'POST'])
+@login_required
 def history():
     return render_template('history.html')
 
-# API to submit journal entry
-@app.route('/submit', methods=['GET', 'POST'])
+# ---------------- APIs ----------------
+@app.route('/submit', methods=['POST'])
+@login_required
 def submit():
-    logger.debug(f"Inside submit")
     data = request.get_json()
     journal_text = data.get('text', '')
-    logger.debug(f"Journal received: {journal_text}")
-    json_payload = {"entries": [journal_text]}
-    logger.debug(f"json_payload : {json_payload}")
-    response = model.analyze_journal(json_payload)
-    #response = {
-    #     "phq9": {
-    #         "total_score": 9,
-    #         "severity": "mild"
-    #     },
-    #     "gad7": {
-    #         "total_score": 9,
-    #         "severity": "mild"
-    #     },
-    #     "themes": [
-    #         "feel anxious",
-    #         "trouble sleeping",
-    #         "anxious trouble"
-    #     ],
-    #     "emotions": [
-    #         "Joy", "Love", "Anger"
-    #     ],
-    #     "feedback": "No significant symptoms detected.",
-    #     "analysis_model": "RoBERTa-GoEmotions+KeyBERT+OPT-1.3b"
-    #}
-    print(f"response : {response}")
-    logger.info(f"response : {response}")
-    #save_journal_entry(journal_text, response)
-    #return jsonify(status="success")
+    response = model.analyze_journal({"entries": [journal_text]})
     journal_id = save_journal_entry(journal_text, response)
-    
     return jsonify(status="success", journal_id=journal_id)
 
-# API to get journal list
 @app.route('/journalList', methods=['GET', 'POST'])
+@login_required
 def journalList():
-    getAllJournalInput = get_journal_list()
-    print(getAllJournalInput)
-    return jsonify(getAllJournalInput)
+    return jsonify(get_journal_list())
 
-@app.route('/journalDetail/<int:journal_id>', methods=['GET'])
+@app.route('/journalDetail/<int:journal_id>')
+@login_required
 def journal_detail(journal_id):
-    journalDetail = get_journal_detail(journal_id)
-    #return render_template('result.html', entry=journalDetail)
-    print(journalDetail)
-    return jsonify(journalDetail)
+    return jsonify(get_journal_detail(journal_id))
 
-@app.route('/summaryEmotionRange', methods=['GET', 'POST'])
+@app.route('/summaryEmotionRange')
+@login_required
 def summaryEmotionRange():
-    emotionRangeList = get_summary_emotion_range()
-    print(emotionRangeList)
-    return jsonify(emotionRangeList)
+    return jsonify(get_summary_emotion_range())
 
-@app.route('/summaryTotalEntry', methods=['GET', 'POST'])
+@app.route('/summaryTotalEntry')
+@login_required
 def summaryTotalEntry():
-    noOfTotalEntry = get_summary_total_entry_days()
-    print(noOfTotalEntry)
-    return jsonify(noOfTotalEntry)
+    return jsonify(get_summary_total_entry_days())
 
-
-# API to get summary themes
-@app.route('/summaryTop3Themes',methods=['GET', 'POST'])
+@app.route('/summaryTop3Themes')
+@login_required
 def summaryThemes():
-    top3Themes = get_summary_top_3_theme()
-    themes = dict(top3Themes)
-    print(themes)
-    return jsonify(themes)
+    return jsonify(dict(get_summary_top_3_theme()))
 
-
-# API to get input streak
-@app.route('/summaryInputStreak', methods=['GET', 'POST'])
+@app.route('/summaryInputStreak')
+@login_required
 def summaryInputStreak():
-    noOfInputStreak = get_summary_input_streak()
-    print(noOfInputStreak)
-    return jsonify(noOfInputStreak)
+    return jsonify(get_summary_input_streak())
 
+# ---------------- RUN ----------------
 if __name__ == '__main__':
     app.run(debug=True)

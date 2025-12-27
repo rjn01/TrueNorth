@@ -207,6 +207,13 @@ ALTER TABLE ONLY public.scores
 ALTER TABLE ONLY public.themes
     ADD CONSTRAINT theme_journal_fk FOREIGN KEY (journal_id) REFERENCES public.journals(id);
 
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Completed on 2025-07-01 01:12:22
 
